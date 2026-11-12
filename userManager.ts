@@ -9,7 +9,7 @@ export interface User {
   isActive: boolean;
 }
 
-let userCache: Record<string, User> = {};
+let userCache: Partial<Record<string, User>> = {};
 
 export function processUserLogin(user: User): string {
   //Save user to cache
@@ -21,6 +21,10 @@ export function processUserLogin(user: User): string {
 
 export function getUserRolePermissions(userId: string): string[] {
   const user = userCache[userId];
+
+  if (!user) {
+    return [];
+  }
 
   if (user.role === "admin") {
     return ["read", "write", "delete", "admin_panel"];
